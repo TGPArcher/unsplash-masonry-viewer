@@ -17,6 +17,25 @@ img {
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
 }
 
+.img-wrapper {
+    position: relative;
+}
+
+.img-wrapper > p {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 1.2em;
+    margin: 0px;
+    text-align: start;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+}
+
 #loading-sensor {
     height: 50px;
 }

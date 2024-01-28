@@ -9,11 +9,13 @@ interface UnsplashImage {
   urls: {
     regular: string;
   };
+  description: string | null;
 }
 
 export interface Image {
   url: string;
   heightToWidthRatio: number;
+  description: string | null;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -44,6 +46,7 @@ export class UnsplashService {
           result.map((i) => ({
             url: i.urls.regular,
             heightToWidthRatio: i.height / i.width,
+            description: i.description,
           }))
         )
       );
@@ -59,6 +62,7 @@ export class UnsplashService {
         result.map((i) => ({
           url: i.urls.regular,
           heightToWidthRatio: i.height / i.width,
+          description: i.description,
         }))
       )
     );

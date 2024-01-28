@@ -6,6 +6,7 @@
       <div
         *ngFor="let image of page.images; index as imageIndex"
         [ngStyle]="{ 'grid-row': image.heightToWidthRatio | ToSpan }"
+        class="img-wrapper"
       >
         <ng-container
           *ngIf="page.pageStartHidden && page.pageEndHidden; else visiblePage"
@@ -34,7 +35,7 @@
             <img
               *ngSwitchCase="0"
               [src]="image.url"
-              alt=""
+              [alt]="image.description"
               observeVisibility
               (hidden)="changePageStartVisibility(pageIndex, true)"
               (visible)="changePageStartVisibility(pageIndex, false)"
@@ -43,14 +44,16 @@
             <img
               *ngSwitchCase="page.images.length - 1"
               [src]="image.url"
-              alt=""
+              [alt]="image.description"
               observeVisibility
               (hidden)="changePageEndVisibility(pageIndex, true)"
               (visible)="changePageEndVisibility(pageIndex, false)"
             />
 
-            <img *ngSwitchDefault [src]="image.url" alt="" />
+            <img *ngSwitchDefault [src]="image.url" [alt]="image.description" />
           </ng-container>
+
+          <p *ngIf="image.description">{{ image.description }}</p>
         </ng-template>
       </div>
     </ng-container>
