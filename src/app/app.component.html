@@ -1,12 +1,65 @@
 <main>
-  <div *ngIf="images$ | async as images" class="grid-wrapper">
-    <div
-      *ngFor="let image of images"
-      [ngStyle]="{ 'grid-row': image.heightToWidthRatio | ToSpan }"
+  <div *ngIf="pages$ | async as pages" class="grid-wrapper">
+    <ng-container
+      *ngFor="let page of pages; index as pageIndex; trackBy: pageTrackBy"
     >
-      <img [src]="image.url" alt="" />
-    </div>
+      <div
+        *ngFor="let image of page.images; index as imageIndex"
+        [ngStyle]="{ 'grid-row': image.heightToWidthRatio | ToSpan }"
+      >
+        <ng-container
+          *ngIf="page.pageStartHidden && page.pageEndHidden; else visiblePage"
+        >
+          <ng-container [ngSwitch]="imageIndex">
+            <div
+              *ngSwitchCase="0"
+              observeVisibility
+              (hidden)="changePageStartVisibility(pageIndex, true)"
+              (visible)="changePageStartVisibility(pageIndex, false)"
+              class="hidden-img"
+            ></div>
+            <div
+              *ngSwitchCase="page.images.length - 1"
+              observeVisibility
+              (hidden)="changePageEndVisibility(pageIndex, true)"
+              (visible)="changePageEndVisibility(pageIndex, false)"
+              class="hidden-img"
+            ></div>
+            <div *ngSwitchDefault class="hidden-img"></div>
+          </ng-container>
+        </ng-container>
 
-    <div id="loading-sensor" observeVisibility (visible)="loadNextPage()"></div>
+        <ng-template #visiblePage>
+          <ng-container [ngSwitch]="imageIndex">
+            <img
+              *ngSwitchCase="0"
+              [src]="image.url"
+              alt=""
+              observeVisibility
+              (hidden)="changePageStartVisibility(pageIndex, true)"
+              (visible)="changePageStartVisibility(pageIndex, false)"
+            />
+
+            <img
+              *ngSwitchCase="page.images.length - 1"
+              [src]="image.url"
+              alt=""
+              observeVisibility
+              (hidden)="changePageEndVisibility(pageIndex, true)"
+              (visible)="changePageEndVisibility(pageIndex, false)"
+            />
+
+            <img *ngSwitchDefault [src]="image.url" alt="" />
+          </ng-container>
+        </ng-template>
+      </div>
+    </ng-container>
+
+    <div
+      id="loading-sensor"
+      observeVisibility
+      [threshold]="1"
+      (visible)="loadNextPage()"
+    ></div>
   </div>
 </main>

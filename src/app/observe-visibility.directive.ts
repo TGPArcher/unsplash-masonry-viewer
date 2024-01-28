@@ -3,6 +3,7 @@ import {
   Directive,
   ElementRef,
   EventEmitter,
+  Input,
   OnDestroy,
   OnInit,
   Output,
@@ -12,7 +13,9 @@ import {
 export class ObserveVisibilityDirective
   implements OnInit, AfterViewInit, OnDestroy
 {
+  @Input() threshold = 0.01;
   @Output() visible = new EventEmitter<void>();
+  @Output() hidden = new EventEmitter<void>();
 
   private observer: IntersectionObserver | undefined;
 
@@ -36,18 +39,18 @@ export class ObserveVisibilityDirective
   private createObserver() {
     const options = {
       rootMargin: '0px',
-      threshold: 1,
+      threshold: this.threshold,
     };
 
     const isIntersecting = (entry: IntersectionObserverEntry) =>
       entry.isIntersecting;
 
-    this.observer = new IntersectionObserver((entries, _) => {
-      entries.forEach((entry) => {
-        if (isIntersecting(entry)) {
-          this.visible.emit();
-        }
-      });
+    this.observer = new IntersectionObserver(([entry]) => {
+      if (isIntersecting(entry)) {
+        this.visible.emit();
+      } else {
+        this.hidden.emit();
+      }
     }, options);
   }
 

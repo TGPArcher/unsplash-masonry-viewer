@@ -26,7 +26,7 @@ export class UnsplashService {
 
   constructor(private httpClient: HttpClient) {}
 
-  getPhotos(page: number): Observable<string[]> {
+  getPhotos(page: number): Observable<Image[]> {
     const endpoint = 'photos';
     const params = new HttpParams({
       fromObject: {
@@ -39,7 +39,14 @@ export class UnsplashService {
         headers: this.authHeaders,
         params: params,
       })
-      .pipe(map((result) => result.map((i) => i.urls.regular)));
+      .pipe(
+        map((result) =>
+          result.map((i) => ({
+            url: i.urls.regular,
+            heightToWidthRatio: i.height / i.width,
+          }))
+        )
+      );
   }
 
   getSavedPhotos(page: number): Observable<Image[]> {

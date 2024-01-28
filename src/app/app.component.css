@@ -1,11 +1,22 @@
-img {
+img, .hidden-img {
     width: 100%;
     height: 100%;
+}
+
+img {
     object-fit: cover;
+}
+
+.hidden-img {
+    background-color: goldenrod;
 }
 
 .grid-wrapper {
     display: grid;
     grid-gap: 10px;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+}
+
+#loading-sensor {
+    height: 50px;
 }
