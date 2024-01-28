@@ -4,9 +4,16 @@ import { EMPTY, Observable, map, of } from 'rxjs';
 import { savedPages } from './saved-requests';
 
 interface UnsplashPhoto {
+  width: number;
+  height: number;
   urls: {
     regular: string;
   };
+}
+
+interface Image {
+  url: string;
+  heightToWidthRatio: number;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -35,13 +42,18 @@ export class UnsplashService {
       .pipe(map((result) => result.map((i) => i.urls.regular)));
   }
 
-  getSavedPhotos(page: number): Observable<string[]> {
+  getSavedPhotos(page: number): Observable<Image[]> {
     const pageIndex = page - 1;
     if (pageIndex >= savedPages.length) return EMPTY;
 
     const pageResponse = savedPages[pageIndex];
     return of(pageResponse).pipe(
-      map((result) => result.map((i) => i.urls.regular))
+      map((result) =>
+        result.map((i) => ({
+          url: i.urls.regular,
+          heightToWidthRatio: i.height / i.width,
+        }))
+      )
     );
   }
 }

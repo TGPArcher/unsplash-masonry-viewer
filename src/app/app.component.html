@@ -1,5 +1,10 @@
 <main>
-  <ng-container *ngIf="images$ | async as images">
-    <img *ngFor="let image of images" [src]="image" />
-  </ng-container>
+  <div *ngIf="images$ | async as images" class="grid-wrapper">
+    <div
+      *ngFor="let image of images"
+      [ngStyle]="{ 'grid-row': image.heightToWidthRatio | ToSpan }"
+    >
+      <img [src]="image.url" alt="" />
+    </div>
+  </div>
 </main>
