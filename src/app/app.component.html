@@ -6,5 +6,7 @@
     >
       <img [src]="image.url" alt="" />
     </div>
+
+    <div id="loading-sensor" observeVisibility (visible)="loadNextPage()"></div>
   </div>
 </main>

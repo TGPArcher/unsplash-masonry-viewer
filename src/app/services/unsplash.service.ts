@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { EMPTY, Observable, map, of } from 'rxjs';
 import { savedPages } from './saved-requests';
 
-interface UnsplashPhoto {
+interface UnsplashImage {
   width: number;
   height: number;
   urls: {
@@ -11,7 +11,7 @@ interface UnsplashPhoto {
   };
 }
 
-interface Image {
+export interface Image {
   url: string;
   heightToWidthRatio: number;
 }
@@ -35,7 +35,7 @@ export class UnsplashService {
       },
     });
     return this.httpClient
-      .get<UnsplashPhoto[]>(`${this.unsplashApiUrl}${endpoint}`, {
+      .get<UnsplashImage[]>(`${this.unsplashApiUrl}${endpoint}`, {
         headers: this.authHeaders,
         params: params,
       })
