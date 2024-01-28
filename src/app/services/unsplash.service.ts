@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Observable, map } from 'rxjs';
+import { EMPTY, Observable, map, of } from 'rxjs';
+import { savedPages } from './saved-requests';
 
 interface UnsplashPhoto {
   urls: {
@@ -32,5 +33,15 @@ export class UnsplashService {
         params: params,
       })
       .pipe(map((result) => result.map((i) => i.urls.regular)));
+  }
+
+  getSavedPhotos(page: number): Observable<string[]> {
+    const pageIndex = page - 1;
+    if (pageIndex >= savedPages.length) return EMPTY;
+
+    const pageResponse = savedPages[pageIndex];
+    return of(pageResponse).pipe(
+      map((result) => result.map((i) => i.urls.regular))
+    );
   }
 }
