@@ -1,1 +1,5 @@
-<main></main>
+<main>
+  <ng-container *ngIf="images$ | async as images">
+    <img *ngFor="let image of images" [src]="image" />
+  </ng-container>
+</main>
